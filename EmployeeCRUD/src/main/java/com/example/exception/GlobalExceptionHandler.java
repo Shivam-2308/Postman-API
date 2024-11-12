@@ -1,5 +1,7 @@
 package com.example.exception;
 
+import com.example.api.ApiResponse;
+import com.example.constants.ApiMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -22,5 +24,11 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<ApiResponse> handleCustomException(ApiException ex) {
+        ApiResponse response = new ApiResponse(ex.getMessage(), ex.getStatus().value());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }
